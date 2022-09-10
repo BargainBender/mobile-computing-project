@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="40dp"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:fontFamily="@font/fira_mono"
+        android:gravity="center"
+        android:text="@string/main_act_title"
+        android:textAlignment="gravity"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/btnGotoBasicMath"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/main_act_btn_goto_basic_math" />
+
+    <Button
+        android:id="@+id/btnGotoStringManipulation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/main_act_btn_goto_string_manipulation" />
+
+    <Button
+        android:id="@+id/btnGotoLayoutDemo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/main_act_btn_goto_layout_demo" />
+
+    <Button
+        android:id="@+id/btnGotoAboutMe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/main_act_btn_goto_about_me" />
+
+    <Button
+        android:id="@+id/btnGotoTodo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/main_act_btn_goto_todo" />
+</LinearLayout>

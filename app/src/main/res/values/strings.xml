@@ -1,0 +1,80 @@
+<resources>
+    <string name="app_name">Midterm Lab 2 by Sebastian Martinez</string>
+    <!-- Start of MainActivity strings -->
+    <string name="main_act_title">Lab Activities Compilation</string>
+    <string name="main_act_btn_goto_basic_math">Basic Math</string>
+    <string name="main_act_btn_goto_string_manipulation">String Manipulation</string>
+    <string name="main_act_btn_goto_layout_demo">Layout Demo</string>
+    <string name="main_act_btn_goto_about_me">About Me</string>
+    <string name="main_act_btn_goto_todo">To-do (Firebase CRUD)</string>
+    <!-- End of MainActivity strings -->
+
+    <!-- Start of BasicMath strings -->
+    <string name="basic_math_act_activity_name">Basic Math</string>
+    <string name="basic_math_act_hint_num1">Num 1</string>
+    <string name="basic_math_act_hint_num2">Num 2</string>
+    <string name="basic_math_act_calculate_button_text">Calculate</string>
+    <string name="basic_math_act_initial_result">0</string>
+
+    <string-array name="basic_math_act_operations_array">
+        <item>Addition</item>
+        <item>Subtraction</item>
+        <item>Multiplication</item>
+        <item>Division</item>
+    </string-array>
+    <!-- End of BasicMath strings -->
+
+    <!-- Start of StringManipulation strings -->
+    <string name="string_man_act_activity_name">String Manipulation</string>
+    <string name="string_man_act_enter_string">Enter String</string>
+    <string name="string_man_act_get_answers">Get Answers</string>
+    <string name="string_man_act_question_1">2.1 convert all consonant to $</string>
+    <string name="string_man_act_question_2">2.2 convert the string to uppercase</string>
+    <string name="string_man_act_question_3">2.3 total number of vowels</string>
+    <!-- End of StringManipulation strings -->
+
+    <!-- Start of LayoutDemo strings -->
+    <string name="layout_demo_act_activity_name">Layout Demo</string>
+    <string name="layout_demo_act_btn_txt">Text</string>
+    <string name="layout_demo_act_btn_txt_image">Mail</string>
+    <string name="layout_demo_act_btn_image">Take Shot</string>
+    <string name="layout_demo_act_btn_toast">Toast</string>
+    <string name="layout_demo_act_cbx_fruit">Fruit</string>
+    <string name="layout_demo_act_cbx_meat">Meat</string>
+    <string name="layout_demo_act_rbtn_one">One</string>
+    <string name="layout_demo_act_rbtn_two">Two</string>
+    <string name="layout_demo_act_rbtn_three">Three</string>
+    <string name="layout_demo_act_tbtn_power">Power Button</string>
+    <string name="layout_demo_act_etxt_msg">Enter Message</string>
+    <string name="layout_demo_act_rbar_text">Rating</string>
+    <!-- End of LayoutDemo strings -->
+
+    <!-- Start of AboutMe strings -->
+    <string name="about_me_act_name_title">Name:</string>
+    <string name="about_me_act_name_value">Sebastian Martinez</string>
+    <string name="about_me_act_age_title">Age:</string>
+    <string name="about_me_act_age_value">22</string>
+    <string name="about_me_act_program_title">Program:</string>
+    <string name="about_me_act_program_value">BS Computer Science</string>
+    <string name="about_me_act_year_lvl_title">Year Level:</string>
+    <string name="about_me_act_year_lvl_value">2nd Year</string>
+    <string name="about_me_act_job_experience_title">Job Experience:</string>
+    <string name="about_me_act_job_experience_value">Web Developer</string>
+    <string name="about_me_act_favorite_framework_title">Favorite Framework:</string>
+    <string name="about_me_act_favorite_framework_value">NextJS</string>
+    <string name="about_me_act_favorite_hosting_service_title">Favorite Hosting Service:</string>
+    <string name="about_me_act_favorite_hosting_service_value">DigitalOcean</string>
+    <string name="about_me_act_favorite_css_framework_title">Favorite CSS Framework:</string>
+    <string name="about_me_act_favorite_css_framework_value">TailwindCSS</string>
+    <string name="about_me_act_favorite_linus_quote_title">Favorite Linus Quote:</string>
+    <string name="about_me_act_favorite_linus_quote_value">"Theory and practice sometimes clash. And when that happens, theory loses."</string>
+    <!-- End of AboutMe strings -->
+
+    <!-- Start of FirebaseCRUD strings -->
+    <string name="open">open</string>
+    <string name="close">close</string>
+    <string name="fab_create">Create</string>
+    <string name="fab_create_list">Create List</string>
+    <string name="fab_create_todo">Create To-do</string>
+    <!-- End of FirebaseCRUD strings -->
+</resources>

@@ -10,7 +10,10 @@ import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.midtermproject.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
@@ -21,6 +24,7 @@ class FirebaseCRUDActivity : AppCompatActivity() {
     private lateinit var fabFirebaseCreate: FloatingActionButton
     private lateinit var fabFirebaseCreateList: FloatingActionButton
     private lateinit var fabFirebaseCreateTodo: FloatingActionButton
+    private lateinit var todoRecyclerView: RecyclerView
 
     private val rotateOpen: Animation by lazy { AnimationUtils.loadAnimation(this, R.anim.rotate_open_anim) }
     private val rotateClose: Animation by lazy { AnimationUtils.loadAnimation(this, R.anim.rotate_close_anim) }
@@ -28,6 +32,8 @@ class FirebaseCRUDActivity : AppCompatActivity() {
     private val toBottom: Animation by lazy { AnimationUtils.loadAnimation(this, R.anim.to_bottom_anim) }
 
     private var fabMenuOpened = false
+
+    private var openedList = "default"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,9 +43,12 @@ class FirebaseCRUDActivity : AppCompatActivity() {
         fabFirebaseCreate = findViewById(R.id.fabFirebaseCreate)
         fabFirebaseCreateList = findViewById(R.id.fabFirebaseCreateList)
         fabFirebaseCreateTodo = findViewById(R.id.fabFirebaseCreateTodo)
+        todoRecyclerView = findViewById(R.id.rvTodos)
+        todoRecyclerView.layoutManager = LinearLayoutManager(this)
+
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        var navMenu = findViewById<NavigationView>(R.id.nav_menu)
+        val navMenu = findViewById<NavigationView>(R.id.nav_menu)
         drawerLayout = findViewById(R.id.drawer_layout)
 
         setSupportActionBar(toolbar)
@@ -52,21 +61,45 @@ class FirebaseCRUDActivity : AppCompatActivity() {
 
         fabFirebaseCreate.setOnClickListener { onFirebaseCreateBtnClicked() }
         fabFirebaseCreateList.setOnClickListener {
-            Toast.makeText(this, "FAB clicked!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "FAB New To-do clicked", Toast.LENGTH_SHORT).show()
         }
         fabFirebaseCreateTodo.setOnClickListener {
-            Toast.makeText(this, "FAB clicked!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "FAB New To-do list clicked!", Toast.LENGTH_SHORT).show()
         }
 
-        DB.getTodoLists(object: DataCollectedCallback {
-            override fun callFunction(value: List<String>) {
-                value.forEach { title ->
-                    Log.d("TODOS", title)
-                    navMenu.animation
-                    navMenu.menu.add(Menu.NONE, DEFAULT_LIST, Menu.NONE, title)
+        DB.getTodoLists(object: TodoListsCollectedCallback {
+            override fun callFunction(value: HashMap<String, String>) {
+                value.forEach {
+                    Log.d("TODOS", "${it.key} -> ${it.value}")
+                    // Set action for clicking each menu item
+                    navMenu.menu.add(Menu.NONE, DEFAULT_LIST, Menu.NONE, it.value).setOnMenuItemClickListener { menuItem ->
+                        Toast.makeText(applicationContext, it.value,Toast.LENGTH_SHORT).show()
+                        Log.d("TODOS-TITLE", menuItem.title.toString())
+                        Log.d("TODOS-LIST-ID", it.key)
+                        drawerLayout.closeDrawer(GravityCompat.START)
+
+                        loadTodos(it.key)
+                        openedList = it.key
+                        return@setOnMenuItemClickListener true
+                    }
                 }
             }
         })
+
+        loadTodos("default")
+    }
+
+    private fun loadTodos(list: String) {
+        DB.getTodos(list, object: TodosCollectedCallback {
+            override fun callFunction(value: HashMap<String, TodoModel>) {
+                value.forEach {
+                    Log.d("TODOS-${list}", "${it.key} -> ${it.value.getIndex()}: ${it.value.getTitle()}, ${if(it.value.getIsDone()) "Done" else "Not done"}")
+                }
+                val todoRVAdapter = TodoRecyclerViewAdapter(this@FirebaseCRUDActivity, value)
+                todoRecyclerView.adapter = todoRVAdapter
+            }
+        })
+
     }
 
     private fun onFirebaseCreateBtnClicked() {

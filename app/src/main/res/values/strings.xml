@@ -76,5 +76,6 @@
     <string name="fab_create">Create</string>
     <string name="fab_create_list">Create List</string>
     <string name="fab_create_todo">Create To-do</string>
+    <string name="to_do_hint">To-do&#8230;</string>
     <!-- End of FirebaseCRUD strings -->
 </resources>

@@ -11,14 +11,6 @@
         android:id="@+id/include"
         layout="@layout/content_firebase_crud" />
 
-    <com.google.android.material.navigation.NavigationView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:headerLayout="@layout/navigation_drawer_header"
-        app:menu="@menu/menu"
-        android:id="@+id/nav_menu"
-        android:layout_gravity="start"/>
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/fabLayout"
         android:layout_width="match_parent"
@@ -30,9 +22,10 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
+            android:backgroundTint="?attr/colorPrimary"
             android:contentDescription="@string/fab_create"
             android:src="@drawable/icons8_plus_67"
-            android:backgroundTint="?attr/colorPrimary"
+            app:backgroundTint="#00FFFFFF"
             app:fabSize="auto"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -46,14 +39,14 @@
             android:layout_marginBottom="16dp"
             android:clickable="true"
             android:contentDescription="@string/fab_create_list"
+            android:focusable="true"
             android:src="@drawable/icons8_list_64"
             android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@+id/fabFirebaseCreate"
             app:layout_constraintEnd_toEndOf="@+id/fabFirebaseCreate"
             app:tint="@color/white"
             tools:ignore="ImageContrastCheck"
-            tools:visibility="visible"
-            android:focusable="true" />
+            tools:visibility="visible" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabFirebaseCreateTodo"
@@ -70,7 +63,16 @@
             app:tint="@color/white"
             tools:ignore="ImageContrastCheck"
             tools:visibility="visible" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.navigation.NavigationView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:headerLayout="@layout/navigation_drawer_header"
+        app:menu="@menu/menu"
+        android:id="@+id/nav_menu"
+        android:layout_gravity="start"/>
 
 
 </androidx.drawerlayout.widget.DrawerLayout>

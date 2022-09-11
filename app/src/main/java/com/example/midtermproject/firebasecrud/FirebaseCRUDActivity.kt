@@ -1,14 +1,21 @@
 package com.example.midtermproject.firebasecrud
 
+import android.content.Context
+import android.content.DialogInterface
+import android.graphics.Rect
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
+import android.view.MotionEvent
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -62,18 +69,32 @@ class FirebaseCRUDActivity : AppCompatActivity() {
         fabFirebaseCreate.setOnClickListener { onFirebaseCreateBtnClicked() }
         fabFirebaseCreateList.setOnClickListener {
             Toast.makeText(this, "FAB New To-do clicked", Toast.LENGTH_SHORT).show()
+            val alert: AlertDialog.Builder = AlertDialog.Builder(this)
+            val etInput = EditText(this)
+            alert.setTitle("To-do:")
+            alert.setView(etInput)
+            alert.setPositiveButton("Add") { _, _ ->
+                val etValue = etInput.text.toString()
+                Log.d("DIALOG", "New To-do: $etValue")
+            }
+
+            alert.setNegativeButton("Cancel") { _, _ ->
+                Log.d("DIALOG", "Cancelled")
+            }
+
+            alert.show()
         }
         fabFirebaseCreateTodo.setOnClickListener {
             Toast.makeText(this, "FAB New To-do list clicked!", Toast.LENGTH_SHORT).show()
         }
 
         DB.getTodoLists(object: TodoListsCollectedCallback {
-            override fun callFunction(value: HashMap<String, String>) {
+            override fun callFunction(value: HashMap<String, TodoListModel>) {
                 value.forEach {
-                    Log.d("TODOS", "${it.key} -> ${it.value}")
+                    Log.d("TODOS", "${it.key} -> ${it.value.getTitle()}")
                     // Set action for clicking each menu item
-                    navMenu.menu.add(Menu.NONE, DEFAULT_LIST, Menu.NONE, it.value).setOnMenuItemClickListener { menuItem ->
-                        Toast.makeText(applicationContext, it.value,Toast.LENGTH_SHORT).show()
+                    navMenu.menu.add(Menu.NONE, DEFAULT_LIST, Menu.NONE, it.value.getTitle()).setOnMenuItemClickListener { menuItem ->
+                        Toast.makeText(applicationContext, it.value.getTitle(),Toast.LENGTH_SHORT).show()
                         Log.d("TODOS-TITLE", menuItem.title.toString())
                         Log.d("TODOS-LIST-ID", it.key)
                         drawerLayout.closeDrawer(GravityCompat.START)
@@ -87,6 +108,25 @@ class FirebaseCRUDActivity : AppCompatActivity() {
         })
 
         loadTodos("default")
+    }
+
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        if (ev != null) {
+            if (ev.action == MotionEvent.ACTION_DOWN) {
+                val currentEt = currentFocus
+                if (currentEt is EditText) {
+                    val outRect = Rect()
+                    currentEt.getGlobalVisibleRect(outRect)
+                    if (!outRect.contains(ev.rawX.toInt(), ev.rawY.toInt())) {
+                        val imm: InputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                        imm.hideSoftInputFromWindow(currentEt.windowToken, 0)
+                        // All this just to clear focus on touch outside of currently focused edittext
+                        currentEt.clearFocus()
+                    }
+                }
+            }
+        }
+        return super.dispatchTouchEvent(ev)
     }
 
     private fun loadTodos(list: String) {

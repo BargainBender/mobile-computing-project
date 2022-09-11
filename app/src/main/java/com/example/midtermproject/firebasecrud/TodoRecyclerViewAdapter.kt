@@ -1,6 +1,7 @@
 package com.example.midtermproject.firebasecrud
 
 import android.content.Context
+import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,8 +23,20 @@ class TodoRecyclerViewAdapter(_context: Context, _todos: HashMap<String, TodoMod
 
     override fun onBindViewHolder(holder: TodoViewHolder, position: Int) {
         // Assign values to each rows based on the position of the recycler view
-            holder.etTitle.setText(todos[position].second.getTitle())
-            holder.cbIsDone.isChecked = todos[position].second.getIsDone()
+        holder.etTitle.setText(todos[position].second.getTitle())
+        holder.cbIsDone.isChecked = todos[position].second.getIsDone()
+        holder.cbIsDone.setOnCheckedChangeListener { _, b ->
+            // Strikethrough depending on check value
+            if (b) {
+                holder.etTitle.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
+            } else {
+                holder.etTitle.paintFlags = 0
+            }
+        }
+        // Strikethrough depending on check value
+        if (todos[position].second.getIsDone()) {
+            holder.etTitle.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
+        }
     }
 
     override fun getItemCount(): Int {

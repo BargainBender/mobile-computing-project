@@ -7,16 +7,17 @@ object DB {
     private val db = Firebase.firestore
 
     fun getTodoLists(callback: TodoListsCollectedCallback) {
-        val lists = hashMapOf<String, String>()
+        val lists = hashMapOf<String, TodoListModel>()
         db.collection("todo-lists")
             .get()
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     for (document in task.result) {
-                        lists[document.id] = document.data["title"].toString()
+                        lists[document.id] = TodoListModel(Integer.parseInt(document.data["index"].toString()), document.data["title"].toString())
                     }
                 }
-                callback.callFunction(lists)
+                val result = lists.toList().sortedBy { (_, value) ->  value.getIndex() }.toMap()
+                callback.callFunction(result as HashMap<String, TodoListModel>)
             }
     }
 
@@ -39,7 +40,7 @@ object DB {
 
 // Create our functions on the fly with this parameter
 interface TodoListsCollectedCallback {
-    fun callFunction(value: HashMap<String, String>)
+    fun callFunction(value: HashMap<String, TodoListModel>)
 }
 
 interface TodosCollectedCallback {

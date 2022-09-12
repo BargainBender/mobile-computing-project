@@ -28,6 +28,10 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, LayoutDemoActivity::class.java))
         }
 
+        findViewById<Button>(R.id.btnGotoAboutMe).setOnClickListener {
+            startActivity(Intent(this, AboutMeActivity::class.java))
+        }
+
         findViewById<Button>(R.id.btnGotoTodo).setOnClickListener {
             startActivity(Intent(this, FirebaseCRUDActivity::class.java))
         }

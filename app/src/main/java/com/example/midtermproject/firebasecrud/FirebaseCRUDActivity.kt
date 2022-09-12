@@ -26,8 +26,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.midtermproject.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
+import java.util.concurrent.Executor
+import java.util.concurrent.Executors
 
 private const val DEFAULT_LIST: Int = 0
+
 class FirebaseCRUDActivity : AppCompatActivity() {
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var fabFirebaseCreate: FloatingActionButton
@@ -37,10 +40,30 @@ class FirebaseCRUDActivity : AppCompatActivity() {
     private lateinit var navMenu: NavigationView
     private lateinit var tvEmptyMessage: TextView
 
-    private val rotateOpen: Animation by lazy { AnimationUtils.loadAnimation(this, R.anim.rotate_open_anim) }
-    private val rotateClose: Animation by lazy { AnimationUtils.loadAnimation(this, R.anim.rotate_close_anim) }
-    private val fromBottom: Animation by lazy { AnimationUtils.loadAnimation(this, R.anim.from_bottom_anim) }
-    private val toBottom: Animation by lazy { AnimationUtils.loadAnimation(this, R.anim.to_bottom_anim) }
+    private val rotateOpen: Animation by lazy {
+        AnimationUtils.loadAnimation(
+            this,
+            R.anim.rotate_open_anim
+        )
+    }
+    private val rotateClose: Animation by lazy {
+        AnimationUtils.loadAnimation(
+            this,
+            R.anim.rotate_close_anim
+        )
+    }
+    private val fromBottom: Animation by lazy {
+        AnimationUtils.loadAnimation(
+            this,
+            R.anim.from_bottom_anim
+        )
+    }
+    private val toBottom: Animation by lazy {
+        AnimationUtils.loadAnimation(
+            this,
+            R.anim.to_bottom_anim
+        )
+    }
 
     private var fabMenuOpened = false
 
@@ -71,7 +94,8 @@ class FirebaseCRUDActivity : AppCompatActivity() {
 
         setSupportActionBar(toolbar)
 
-        val toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close)
+        val toggle =
+            ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close)
         drawerLayout.addDrawerListener(toggle)
         toggle.isDrawerIndicatorEnabled = true
         // Checks if navbar indicator is open / closed
@@ -87,14 +111,20 @@ class FirebaseCRUDActivity : AppCompatActivity() {
     }
 
     private fun loadTodoLists() {
-        DB.getTodoLists(object: TodoListsCollectedCallback {
+        DB.getTodoLists(object : TodoListsCollectedCallback {
             override fun callFunction(value: HashMap<String, TodoListModel>) {
                 navMenu.menu.removeGroup(Menu.CATEGORY_CONTAINER)
                 value.forEach {
                     Log.d("TODOS", "${it.key} -> ${it.value.getTitle()}")
                     // Set action for clicking each menu item
-                    navMenu.menu.add(Menu.CATEGORY_CONTAINER, DEFAULT_LIST, Menu.NONE, it.value.getTitle()).setOnMenuItemClickListener { menuItem ->
-                        Toast.makeText(applicationContext, it.value.getTitle(),Toast.LENGTH_SHORT).show()
+                    navMenu.menu.add(
+                        Menu.CATEGORY_CONTAINER,
+                        DEFAULT_LIST,
+                        Menu.NONE,
+                        it.value.getTitle()
+                    ).setOnMenuItemClickListener { menuItem ->
+                        Toast.makeText(applicationContext, it.value.getTitle(), Toast.LENGTH_SHORT)
+                            .show()
                         Log.d("TODOS-TITLE", menuItem.title.toString())
                         Log.d("TODOS-LIST-ID", it.key)
                         drawerLayout.closeDrawer(GravityCompat.START)
@@ -124,24 +154,31 @@ class FirebaseCRUDActivity : AppCompatActivity() {
                     title = "Add to-do"
                     alert.setPositiveButton("Add") { _, _ ->
                         val etValue = etInput.text.toString()
-                        DB.createTodo(openedList, etValue, openedListMaxIndex + 1, object : CreateTodoOrListCallback {
-                            override fun callFunction(id: String) {
-                                loadTodos(openedList)
-                                Log.d("DIALOG", "New To-do: $id -> $etValue")
-                            }
-                        })
+                        DB.createTodo(
+                            openedList,
+                            etValue,
+                            openedListMaxIndex + 1,
+                            object : CreateTodoOrListCallback {
+                                override fun callFunction(id: String) {
+                                    loadTodos(openedList)
+                                    Log.d("DIALOG", "New To-do: $id -> $etValue")
+                                }
+                            })
                     }
                 }
                 R.id.fabFirebaseCreateList -> {
                     title = "Create to-do list"
                     alert.setPositiveButton("Create") { _, _ ->
                         val etValue = etInput.text.toString()
-                        DB.createTodoList(etValue, listsMaxIndex, object : CreateTodoOrListCallback {
-                            override fun callFunction(id: String) {
-                                loadTodoLists()
-                                Log.d("DIALOG", "New To-do list: $id -> $etValue")
-                            }
-                        })
+                        DB.createTodoList(
+                            etValue,
+                            listsMaxIndex,
+                            object : CreateTodoOrListCallback {
+                                override fun callFunction(id: String) {
+                                    loadTodoLists()
+                                    Log.d("DIALOG", "New To-do list: $id -> $etValue")
+                                }
+                            })
                     }
                 }
             }
@@ -165,7 +202,8 @@ class FirebaseCRUDActivity : AppCompatActivity() {
                     val outRect = Rect()
                     currentEt.getGlobalVisibleRect(outRect)
                     if (!outRect.contains(ev.rawX.toInt(), ev.rawY.toInt())) {
-                        val imm: InputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                        val imm: InputMethodManager =
+                            getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                         imm.hideSoftInputFromWindow(currentEt.windowToken, 0)
                         // All this just to clear focus on touch outside of currently focused edittext
                         currentEt.clearFocus()
@@ -177,7 +215,7 @@ class FirebaseCRUDActivity : AppCompatActivity() {
     }
 
     private fun loadTodos(list: String) {
-        DB.getTodos(list, object: TodosCollectedCallback {
+        DB.getTodos(list, object : TodosCollectedCallback {
             override fun callFunction(value: HashMap<String, TodoModel>) {
                 if (value.size > 0) {
                     tvEmptyMessage.visibility = View.GONE
@@ -185,11 +223,15 @@ class FirebaseCRUDActivity : AppCompatActivity() {
                     tvEmptyMessage.visibility = View.VISIBLE
                 }
                 value.forEach {
-                    Log.d("TODOS-${list}", "${it.key} -> ${it.value.getIndex()}: ${it.value.getTitle()}, ${if(it.value.getIsDone()) "Done" else "Not done"}")
+                    Log.d(
+                        "TODOS-${list}",
+                        "${it.key} -> ${it.value.getIndex()}: ${it.value.getTitle()}, ${if (it.value.getIsDone()) "Done" else "Not done"}"
+                    )
                 }
 
                 currentList = value
-                val todoRVAdapter = TodoRecyclerViewAdapter(this@FirebaseCRUDActivity, currentList)
+                val todoRVAdapter =
+                    TodoRecyclerViewAdapter(this@FirebaseCRUDActivity, currentList)
                 todoRecyclerView.adapter = todoRVAdapter
 
                 val swipeDeleteCallback = object : SwipeDeleteCallback() {
@@ -199,7 +241,10 @@ class FirebaseCRUDActivity : AppCompatActivity() {
                         DB.deleteTodo(openedList, positionIDMap[position].toString())
 
                         Log.d("REMOVE", "onSwiped: ${positionIDMap[position]}")
-                        Log.d("REMOVE", "onSwiped: ${currentList[positionIDMap[position]]!!.getTitle()}")
+                        Log.d(
+                            "REMOVE",
+                            "onSwiped: ${currentList[positionIDMap[position]]!!.getTitle()}"
+                        )
                         currentList.remove(positionIDMap[position])
                         if (currentList.size < 1) {
                             tvEmptyMessage.visibility = View.VISIBLE
@@ -207,7 +252,8 @@ class FirebaseCRUDActivity : AppCompatActivity() {
                             tvEmptyMessage.visibility = View.GONE
                         }
                         // Set a new adapter for the new list
-                        val newTodoRVAdapter = TodoRecyclerViewAdapter(this@FirebaseCRUDActivity, currentList)
+                        val newTodoRVAdapter =
+                            TodoRecyclerViewAdapter(this@FirebaseCRUDActivity, currentList)
                         todoRecyclerView.adapter = newTodoRVAdapter
                         newTodoRVAdapter.notifyItemRemoved(position)
                     }
